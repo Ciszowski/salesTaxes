@@ -1,8 +1,9 @@
 package com.sales.salesTaxes.service;
 
+import com.sales.salesTaxes.helper.TaxCalculator;
 import com.sales.salesTaxes.model.Item;
 
-public class ImportedTaxCalculator  implements  TaxCalculator {
+public class ImportedTaxCalculator  implements TaxCalculator {
     private static final double IMPORTED_TAX_RATE = 0.05;
 
     @Override

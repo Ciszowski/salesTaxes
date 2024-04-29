@@ -1,14 +1,13 @@
 package com.sales.salesTaxes.controller;
 
-import com.sales.salesTaxes.model.Item;
+import com.sales.salesTaxes.exception.ItemException;
+import com.sales.salesTaxes.exception.ShoppingException;
 import com.sales.salesTaxes.model.Receipt;
-import com.sales.salesTaxes.service.ShoppingService;
+import com.sales.salesTaxes.helper.ShoppingService;
 import com.sales.salesTaxes.utils.ReceiptGenerator;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,7 +19,7 @@ public class ShoppingController {
     }
 
     @GetMapping("/receipt")
-    public ResponseEntity<Receipt> generateReceipt(@RequestBody(required = false) List<String> stringItems) {
+    public ResponseEntity<Receipt> generateReceipt(@RequestBody(required = false) List<String> stringItems) throws ShoppingException, ItemException {
         ReceiptGenerator receiptGenerator = new ReceiptGenerator(shoppingService);
         return receiptGenerator.generateReceipt(stringItems);
     };

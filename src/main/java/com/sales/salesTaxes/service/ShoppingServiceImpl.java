@@ -1,4 +1,7 @@
 package com.sales.salesTaxes.service;
+import com.sales.salesTaxes.exception.ShoppingException;
+import com.sales.salesTaxes.helper.ShoppingService;
+import com.sales.salesTaxes.helper.TaxCalculator;
 import com.sales.salesTaxes.model.Item;
 import com.sales.salesTaxes.model.Receipt;
 import org.springframework.stereotype.Service;
@@ -13,7 +16,10 @@ public class ShoppingServiceImpl implements ShoppingService {
     }
 
     @Override
-    public Receipt generateReceipt(List<Item> items) {
+    public Receipt generateReceipt(List<Item> items) throws ShoppingException {
+        if (items == null || items.isEmpty()) {
+            throw new ShoppingException("This list of items is null or empty");
+        }
         // logic;
         double totalSalesTaxes = 0;
         double totalPrice = 0;

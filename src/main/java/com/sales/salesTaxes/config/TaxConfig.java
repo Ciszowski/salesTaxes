@@ -2,7 +2,7 @@ package com.sales.salesTaxes.config;
 
 import com.sales.salesTaxes.service.BasicTaxCalculator;
 import com.sales.salesTaxes.service.ImportedTaxCalculator;
-import com.sales.salesTaxes.service.TaxCalculator;
+import com.sales.salesTaxes.helper.TaxCalculator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
