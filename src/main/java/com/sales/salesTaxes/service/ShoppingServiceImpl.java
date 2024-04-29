@@ -2,6 +2,7 @@ package com.sales.salesTaxes.service;
 
 import com.sales.salesTaxes.model.Item;
 import com.sales.salesTaxes.model.Receipt;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -16,21 +17,20 @@ public class ShoppingServiceImpl implements ShoppingService {
         double totalPrice = 0;
         List<String> receiptLines = new ArrayList<>();
 
-
         for (Item item: items) {
             double itemPrice = item.getPrice();
             double salesTax = calculateSalesTax(item);
             totalSalesTaxes += salesTax;
 
-            double taxedPrice = itemPrice * salesTax;
+            double taxedPrice = itemPrice + salesTax;
             totalPrice += taxedPrice;
 
-            String receiptLine = String.format("%d %s: %.2f", 1, item.getName(), taxedPrice);
+            String receiptLine = String.format("%s: %.2f", item.getName(), taxedPrice);
             receiptLines.add(receiptLine);
         }
         Receipt receipt = new Receipt();
         receipt.setItems(receiptLines);
-        receipt.setTotalSalesTaxes(roundSalesTax(totalSalesTaxes));
+        receipt.setTotalSalesTaxes(roundPrice(totalSalesTaxes));
         receipt.setTotalPrice(roundPrice(totalPrice));
         return receipt;
     }
@@ -46,21 +46,22 @@ public class ShoppingServiceImpl implements ShoppingService {
 
         // Applique duty tax except pour les exempt items
         if(isExemptDutyTax(item)) {
-            salesTax += item.getPrice() * importTaxRate;
+            double dutyTaxRounded = roundSalesTax(item.getPrice() * importTaxRate);
+            salesTax += dutyTaxRounded;
         }
         return salesTax;
     }
-    boolean isExemptTax(Item item) {
+    boolean isExemptTax(@NotNull Item item) {
         // check if l item est exempt des taxes basic
         String itemName = item.getName().toLowerCase();
-        return !itemName.contains("book") && !itemName.contains("food") && !itemName.contains("medical");
+        return !itemName.contains("book") && !itemName.contains("chocolate") && !itemName.contains("pill");
     }
-    boolean isExemptDutyTax(Item item) {
+    boolean isExemptDutyTax(@NotNull Item item) {
         return item.getImported();
     }
     double roundSalesTax(double tax) {
         // Round au plus pres de 0.05
-        return Math.round(tax * 20) / 20.0;
+        return Math.ceil(tax * 20) / 20.0;
     }
     double roundPrice(double price) {
         // Round a la 2nd decimal

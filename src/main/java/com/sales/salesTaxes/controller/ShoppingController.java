@@ -30,7 +30,6 @@ public class ShoppingController {
             Item item = mapToItem(stringItem);
             itemList.add(item);
         }
-        System.out.println("check if something wrong " + itemList.toArray().length);
         Receipt receipt = shoppingService.generateReceipt(itemList);
         return ResponseEntity.ok(receipt);
     };
